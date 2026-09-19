@@ -1,0 +1,14 @@
+# Flutter
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+*.iml
+
+# Functions
+functions/node_modules/
+functions/.env
+
+# OS
+.DS_Store
