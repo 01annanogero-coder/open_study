@@ -93,3 +93,10 @@ and a check in `tool/verify_sources.js`.
 Licences come from the providers and can be wrong or change. Check the licence
 before reusing anything. If you believe an item is wrongly listed, tell the
 provider that hosts it.
+
+## Licence
+
+The source code of this app is released under the [MIT License](LICENSE), so
+anyone may use, copy, change and share it. That licence covers the app's code
+only. The study material the app finds belongs to its authors and providers and
+stays under the licences shown next to each result.
