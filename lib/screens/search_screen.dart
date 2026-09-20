@@ -5,12 +5,23 @@ import '../services/search_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/resource_card.dart';
 import '../widgets/subcategory_chips.dart';
-import 'about_screen.dart';
-import 'document_viewer_screen.dart';
-import 'video_player_screen.dart';
+import '../services/local_store.dart';
+import 'open_resource.dart';
+
+/// A request from another screen (Home, Saved) to run a search. Each request is
+/// a new object, so asking for the same words twice still runs twice.
+class SearchRequest {
+  final String query;
+  SearchRequest(this.query);
+}
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({super.key});
+  final LocalStore store;
+
+  /// Other screens post a [SearchRequest] here to make this screen search.
+  final ValueNotifier<SearchRequest?>? requests;
+
+  const SearchScreen({super.key, required this.store, this.requests});
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
@@ -28,9 +39,24 @@ class _SearchScreenState extends State<SearchScreen> {
   SearchResult? _result;
   String _lastQuery = '';
 
+  @override
+  void initState() {
+    super.initState();
+    widget.requests?.addListener(_onRequest);
+  }
+
+  void _onRequest() {
+    final request = widget.requests?.value;
+    if (request == null) return;
+    _controller.text = request.query;
+    _runSearch();
+  }
+
   Future<void> _runSearch({String? subcategory}) async {
     final query = _controller.text.trim();
     if (query.isEmpty) return;
+    // Only fresh searches are remembered, not chip refinements.
+    if (subcategory == null) widget.store.addRecentSearch(query);
 
     setState(() {
       _state = _LoadState.loading;
@@ -54,21 +80,12 @@ class _SearchScreenState extends State<SearchScreen> {
     }
   }
 
-  void _openResource(StudyResource resource) {
-    if (resource.isYouTube) {
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => VideoPlayerScreen(resource: resource)),
-      );
-    } else {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-            builder: (_) => DocumentViewerScreen(resource: resource)),
-      );
-    }
-  }
+  void _openResource(StudyResource resource) =>
+      openResource(context, resource, widget.store);
 
   @override
   void dispose() {
+    widget.requests?.removeListener(_onRequest);
     _controller.dispose();
     _api.dispose();
     super.dispose();
@@ -78,17 +95,8 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Open Study'),
+        title: const Text('Search'),
         titleTextStyle: Theme.of(context).textTheme.headlineSmall,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.info_outline_rounded),
-            tooltip: 'About, sources and licences',
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const AboutScreen()),
-            ),
-          ),
-        ],
       ),
       body: SafeArea(
         child: Column(

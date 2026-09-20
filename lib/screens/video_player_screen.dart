@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../models/study_resource.dart';
+import '../services/local_store.dart';
 import '../theme/app_theme.dart';
+import '../widgets/bookmark_button.dart';
 
 /// Plays a Creative Commons YouTube video with YouTube's official embedded
 /// player, unmodified and with its controls and branding intact. The app never
 /// extracts, downloads or proxies video streams.
 class VideoPlayerScreen extends StatefulWidget {
   final StudyResource resource;
-  const VideoPlayerScreen({super.key, required this.resource});
+  final LocalStore store;
+  const VideoPlayerScreen({super.key, required this.resource, required this.store});
 
   @override
   State<VideoPlayerScreen> createState() => _VideoPlayerScreenState();
@@ -83,6 +86,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(r.title, maxLines: 1, overflow: TextOverflow.ellipsis),
+        actions: [BookmarkButton(store: widget.store, resource: r)],
       ),
       body: controller == null
           ? ListView(children: [

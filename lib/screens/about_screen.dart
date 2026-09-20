@@ -54,7 +54,10 @@ class AboutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(title: const Text('About Open Study')),
+      appBar: AppBar(
+        title: const Text('About Open Study'),
+        titleTextStyle: theme.textTheme.headlineSmall,
+      ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -90,7 +93,8 @@ class AboutScreen extends StatelessWidget {
           Text('Privacy', style: theme.textTheme.titleMedium),
           const SizedBox(height: 6),
           Text(
-            'Open Study has no accounts, no servers and no analytics, and it does not store your searches. '
+            'Open Study has no accounts, no servers and no analytics. '
+            'Your saved results and recent searches are kept only on this phone, and you can clear them any time from the Saved tab. '
             'When you search, your device sends the search words directly to the providers above, which can see your IP address and your search words under their own privacy policies. '
             'Videos are played by YouTube, which is subject to the YouTube Terms of Service and the Google Privacy Policy.',
             style: theme.textTheme.bodyMedium,

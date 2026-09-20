@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-/// Centralized visual identity. Deep indigo + warm amber accent reads as
-/// "study tool" without looking like a generic Material default app.
+/// Centralized visual identity: a vivid indigo on a soft lavender-white
+/// background, with pale lavender circles behind icons.
 class AppColors {
-  static const Color background = Color(0xFFF7F6F3);
+  static const Color background = Color(0xFFF8F7FF);
   static const Color surface = Color(0xFFFFFFFF);
-  static const Color primary = Color(0xFF2E2A6E); // deep indigo
-  static const Color primaryLight = Color(0xFF4B4599);
-  static const Color accent = Color(0xFFE8A33D); // warm amber
-  static const Color textPrimary = Color(0xFF1C1B29);
-  static const Color textSecondary = Color(0xFF6B6880);
+  static const Color primary = Color(0xFF4A3AE0);
+  static const Color primaryLight = Color(0xFF6C5CF0);
+  static const Color tint = Color(0xFFEEEBFF); // pale lavender behind icons
+  static const Color accent = Color(0xFF4A3AE0); // licence labels and links
+  static const Color textPrimary = Color(0xFF14122B);
+  static const Color textSecondary = Color(0xFF6B6A85);
   static const Color pdfBadge = Color(0xFFCE4257);
   static const Color videoBadge = Color(0xFF2A9D8F);
   static const Color articleBadge = Color(0xFF3D5A80);
-  static const Color divider = Color(0xFFE7E5DF);
+  static const Color divider = Color(0xFFE8E6F5);
 }
 
 class AppTheme {
@@ -24,13 +25,19 @@ class AppTheme {
       scaffoldBackgroundColor: AppColors.background,
       colorScheme: base.colorScheme.copyWith(
         primary: AppColors.primary,
-        secondary: AppColors.accent,
+        secondary: AppColors.primaryLight,
         surface: AppColors.surface,
       ),
       textTheme: GoogleFonts.interTextTheme(base.textTheme).copyWith(
-        headlineSmall: GoogleFonts.spaceGrotesk(
-          fontSize: 24,
-          fontWeight: FontWeight.w700,
+        headlineMedium: GoogleFonts.inter(
+          fontSize: 28,
+          fontWeight: FontWeight.w800,
+          height: 1.15,
+          color: AppColors.textPrimary,
+        ),
+        headlineSmall: GoogleFonts.inter(
+          fontSize: 22,
+          fontWeight: FontWeight.w800,
           color: AppColors.textPrimary,
         ),
         titleMedium: GoogleFonts.inter(
@@ -49,6 +56,27 @@ class AppTheme {
         surfaceTintColor: Colors.transparent,
         foregroundColor: AppColors.textPrimary,
       ),
+      navigationBarTheme: NavigationBarThemeData(
+        backgroundColor: AppColors.surface,
+        surfaceTintColor: Colors.transparent,
+        indicatorColor: Colors.transparent,
+        height: 68,
+        labelTextStyle: WidgetStateProperty.resolveWith((states) {
+          final selected = states.contains(WidgetState.selected);
+          return GoogleFonts.inter(
+            fontSize: 12,
+            fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+            color: selected ? AppColors.primary : AppColors.textSecondary,
+          );
+        }),
+        iconTheme: WidgetStateProperty.resolveWith((states) {
+          final selected = states.contains(WidgetState.selected);
+          return IconThemeData(
+            size: 26,
+            color: selected ? AppColors.primary : AppColors.textSecondary,
+          );
+        }),
+      ),
       chipTheme: base.chipTheme.copyWith(
         backgroundColor: AppColors.surface,
         selectedColor: AppColors.primary,
@@ -62,7 +90,7 @@ class AppTheme {
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(28),
           borderSide: BorderSide.none,
         ),
       ),
@@ -70,7 +98,7 @@ class AppTheme {
         color: AppColors.surface,
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(20),
           side: const BorderSide(color: AppColors.divider),
         ),
       ),

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/study_resource.dart';
+import '../services/local_store.dart';
 import '../theme/app_theme.dart';
+import '../widgets/bookmark_button.dart';
 
 /// Shows a resource's own page (or the provider's official viewer) inside the
 /// app, exactly as the provider serves it. Nothing on the page is modified:
@@ -11,7 +13,8 @@ import '../theme/app_theme.dart';
 /// the author properly.
 class DocumentViewerScreen extends StatefulWidget {
   final StudyResource resource;
-  const DocumentViewerScreen({super.key, required this.resource});
+  final LocalStore store;
+  const DocumentViewerScreen({super.key, required this.resource, required this.store});
 
   @override
   State<DocumentViewerScreen> createState() => _DocumentViewerScreenState();
@@ -33,6 +36,7 @@ class _DocumentViewerScreenState extends State<DocumentViewerScreen> {
       appBar: AppBar(
         title: Text(r.title, maxLines: 1, overflow: TextOverflow.ellipsis),
         actions: [
+          BookmarkButton(store: widget.store, resource: r),
           IconButton(
             icon: const Icon(Icons.open_in_browser_rounded),
             tooltip: 'Open original page in browser',

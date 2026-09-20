@@ -44,6 +44,36 @@ class StudyResource {
     this.creator,
   });
 
+  /// Stored form used by the on-device bookmarks list.
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'title': title,
+        'source': source,
+        'license': license,
+        'licenseUrl': licenseUrl,
+        'type': type.name,
+        'url': url,
+        'thumbnailUrl': thumbnailUrl,
+        'description': description,
+        'creator': creator,
+      };
+
+  factory StudyResource.fromJson(Map<String, dynamic> json) => StudyResource(
+        id: json['id'] as String,
+        title: json['title'] as String,
+        source: json['source'] as String,
+        license: json['license'] as String,
+        licenseUrl: json['licenseUrl'] as String?,
+        type: ResourceType.values.firstWhere(
+          (t) => t.name == json['type'],
+          orElse: () => ResourceType.unknown,
+        ),
+        url: json['url'] as String,
+        thumbnailUrl: json['thumbnailUrl'] as String?,
+        description: json['description'] as String?,
+        creator: json['creator'] as String?,
+      );
+
   bool get isYouTube {
     final host = Uri.tryParse(url)?.host.toLowerCase() ?? '';
     return host == 'www.youtube.com' ||

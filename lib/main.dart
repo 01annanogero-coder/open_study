@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
-import 'screens/search_screen.dart';
+import 'screens/app_shell.dart';
+import 'services/local_store.dart';
 import 'theme/app_theme.dart';
 
-void main() {
-  runApp(const OpenStudyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final store = await LocalStore.open();
+  runApp(OpenStudyApp(store: store));
 }
 
 class OpenStudyApp extends StatelessWidget {
-  const OpenStudyApp({super.key});
+  final LocalStore store;
+  const OpenStudyApp({super.key, required this.store});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +19,7 @@ class OpenStudyApp extends StatelessWidget {
       title: 'Open Study',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
-      home: const SearchScreen(),
+      home: AppShell(store: store),
     );
   }
 }

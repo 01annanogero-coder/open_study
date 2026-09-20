@@ -23,6 +23,9 @@ dependencies:
   # Opening the original source / licence pages
   url_launcher: ^6.3.0
 
+  # Bookmarks and recent searches, stored only on the phone
+  shared_preferences: ^2.3.0
+
   # UI
   cupertino_icons: ^1.0.6
   cached_network_image: ^3.3.1

@@ -7,6 +7,14 @@ Open Study is only a search tool. It has **no server of its own** and does not
 host, copy, cache or resell anything. The phone talks directly to each
 provider's official public API, and every result opens the provider's own page.
 
+## What the app has
+
+- **Home:** a search bar, six subject shortcuts and hand-picked starting topics. Each one simply starts a normal search.
+- **Search:** results from all sources at once, each with its provider and licence.
+- **Saved:** bookmarks and recent searches, stored only on the phone and clearable at any time.
+- **About:** the sources, licences, attribution notices and privacy notes.
+- **No accounts:** there is no sign-in, no server and no analytics.
+
 ## What the app does not do
 
 - It does not remove paywalls, log-in walls, blur overlays or adverts.
@@ -70,11 +78,16 @@ lib/
   services/
     search_service.dart             # runs all sources at once, merges, makes chips
     sources/                        # one class per provider (official APIs only)
+    local_store.dart                # bookmarks and recent searches, on the phone only
   screens/
+    app_shell.dart                  # bottom navigation: Home, Search, Saved, About
+    home_screen.dart                # search bar, subjects, starting topics
     search_screen.dart
+    saved_screen.dart
     document_viewer_screen.dart     # provider's page, unmodified, with attribution
     video_player_screen.dart        # official YouTube player
     about_screen.dart               # sources, licences, privacy
+    open_resource.dart              # opens a result the same way from every screen
   widgets/
 tool/
   verify_sources.js
