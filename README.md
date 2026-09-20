@@ -40,6 +40,16 @@ provider's official public API, and every result opens the provider's own page.
 The About screen in the app lists these sources, the attribution notices they
 ask for, and the privacy notes for students.
 
+## Install (Android)
+
+Open Study is available for Android 7.0 or newer. There is no iPhone version yet.
+
+1. Download `OpenStudy-<version>.apk` from the [latest release](https://github.com/01annanogero-coder/open_study/releases/latest).
+2. Open the file on your phone. If Android asks, allow your browser or file manager to install apps.
+3. Open **Open Study**.
+
+Each release lists a SHA-256 checksum for the file and the fingerprint of the key it is signed with, so you can check that your download is genuine.
+
 ## Running the app
 
 There is no backend to deploy.
