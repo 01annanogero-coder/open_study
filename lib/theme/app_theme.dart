@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-/// Centralized visual identity: a vivid indigo on a soft lavender-white
-/// background, with pale lavender circles behind icons.
+/// Centralized visual identity: deep navy with a warm gold accent on a soft
+/// off-white background, with light grey-blue tiles behind icons.
 class AppColors {
-  static const Color background = Color(0xFFF8F7FF);
+  static const Color background = Color(0xFFFAF9F6);
   static const Color surface = Color(0xFFFFFFFF);
-  static const Color primary = Color(0xFF4A3AE0);
-  static const Color primaryLight = Color(0xFF6C5CF0);
-  static const Color tint = Color(0xFFEEEBFF); // pale lavender behind icons
-  static const Color accent = Color(0xFF4A3AE0); // licence labels and links
-  static const Color textPrimary = Color(0xFF14122B);
-  static const Color textSecondary = Color(0xFF6B6A85);
+  static const Color primary = Color(0xFF1F2A6B);
+  static const Color primaryLight = Color(0xFF2E3C8F);
+  static const Color primaryDark = Color(0xFF141C4D);
+  static const Color gold = Color(0xFFF2B233);
+  static const Color cream = Color(0xFFFFF6E3); // filled button on the hero
+  static const Color tint = Color(0xFFEFF1F6); // tiles and chips behind icons
+  static const Color searchFill = Color(0xFFECEFF6);
+  static const Color accent = Color(0xFF2E3C8F); // licence labels and links
+  static const Color textPrimary = Color(0xFF151A33);
+  static const Color textSecondary = Color(0xFF6B7085);
   static const Color pdfBadge = Color(0xFFCE4257);
-  static const Color videoBadge = Color(0xFF2A9D8F);
+  static const Color videoBadge = Color(0xFFE53935);
   static const Color articleBadge = Color(0xFF3D5A80);
-  static const Color divider = Color(0xFFE8E6F5);
+  static const Color divider = Color(0xFFE6E8EF);
 }
 
 class AppTheme {
@@ -86,11 +90,12 @@ class AppTheme {
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.surface,
+        fillColor: AppColors.searchFill,
+        hintStyle: GoogleFonts.inter(fontSize: 14.5, color: AppColors.textSecondary),
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(28),
+          borderRadius: BorderRadius.circular(18),
           borderSide: BorderSide.none,
         ),
       ),
@@ -98,7 +103,7 @@ class AppTheme {
         color: AppColors.surface,
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(16),
           side: const BorderSide(color: AppColors.divider),
         ),
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:open_study_app/main.dart';
+import 'package:open_study_app/screens/app_shell.dart';
 import 'package:open_study_app/services/local_store.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -11,7 +12,7 @@ Future<void> pumpApp(WidgetTester tester) async {
 }
 
 void main() {
-  testWidgets('home shows the welcome, search bar, subjects and starting points',
+  testWidgets('home shows the header, search bar, subjects and recommendations',
       (tester) async {
     // A tall screen, so the lazily built list shows every section at once.
     tester.view.physicalSize = const Size(900, 2600);
@@ -19,13 +20,13 @@ void main() {
     addTearDown(tester.view.reset);
     await pumpApp(tester);
 
-    expect(find.text('What would you like to learn today?'), findsOneWidget);
+    expect(find.text('Open Study'), findsOneWidget);
     expect(find.byType(TextField), findsOneWidget);
-    expect(find.text('Explore subjects'), findsOneWidget);
-    expect(find.text('Mathematics'), findsOneWidget);
-    expect(find.text('Business'), findsOneWidget);
-    expect(find.text('Popular starting points'), findsOneWidget);
-    expect(find.text('Artificial Intelligence'), findsOneWidget);
+    expect(find.text('Popular Subjects'), findsOneWidget);
+    expect(find.text('Mathematics'), findsWidgets);
+    expect(find.text('Engineering'), findsOneWidget);
+    expect(find.text('Recommended for you'), findsOneWidget);
+    expect(find.text('Python for Beginners'), findsOneWidget);
 
     // No invented ratings or lesson counts, and no sign-in anywhere.
     expect(find.textContaining('lessons'), findsNothing);
@@ -37,7 +38,7 @@ void main() {
     await pumpApp(tester);
 
     for (final label in ['Home', 'Search', 'Saved', 'About']) {
-      expect(find.descendant(of: find.byType(NavigationBar), matching: find.text(label)),
+      expect(find.descendant(of: find.byType(BottomTabBar), matching: find.text(label)),
           findsOneWidget);
     }
   });
@@ -45,7 +46,7 @@ void main() {
   testWidgets('saved tab is empty and says data stays on the phone', (tester) async {
     await pumpApp(tester);
 
-    await tester.tap(find.descendant(of: find.byType(NavigationBar), matching: find.text('Saved')));
+    await tester.tap(find.descendant(of: find.byType(BottomTabBar), matching: find.text('Saved')));
     await tester.pumpAndSettle();
 
     expect(find.text('Stored only on this phone. Nothing is sent anywhere.'), findsOneWidget);
@@ -56,7 +57,7 @@ void main() {
   testWidgets('about tab explains sources and privacy', (tester) async {
     await pumpApp(tester);
 
-    await tester.tap(find.descendant(of: find.byType(NavigationBar), matching: find.text('About')));
+    await tester.tap(find.descendant(of: find.byType(BottomTabBar), matching: find.text('About')));
     await tester.pumpAndSettle();
 
     expect(find.text('Where results come from'), findsOneWidget);
