@@ -1,0 +1,117 @@
+import '../../../models/course.dart';
+
+/// "Introduction to Intellectual Property" by OpenStax (Rice University), CC BY 4.0.
+///
+/// Each lesson opens its page on openstax.org. Chapters and sections follow
+/// OpenStax's official table of contents. Generated; edit with care.
+const Course openstaxIntroductionIntellectualProperty = Course(
+  id: 'openstax-introduction-intellectual-property',
+  title: 'Introduction to Intellectual Property',
+  author: 'David Kline, David Kappos',
+  edition: 'OpenStax, 2021',
+  license: 'CC BY 4.0',
+  licenseUrl: 'https://creativecommons.org/licenses/by/4.0/',
+  publisher: 'OpenStax',
+  description: 'Introduction to Intellectual Property provides a clear, effective introduction to patents, copyright, trademarks, and trade secrets.',
+  fullTextUrl: 'https://openstax.org/details/books/introduction-intellectual-property',
+  webBase: 'https://openstax.org/books/introduction-intellectual-property/pages/',
+  sourceNote: 'Each lesson opens its section on openstax.org, as OpenStax publishes it. '
+      'Access for free at openstax.org. Text © Rice University, licensed CC BY 4.0.',
+  chapters: [
+    CourseChapter(
+      id: 'ch1',
+      number: '1',
+      title: 'Patent Basics',
+      lessons: [
+        Lesson(id: 'ch1-intro', sectionRef: '', title: 'Introduction', url: '1-introduction'),
+        Lesson(id: 'ch1-s1', sectionRef: '1.1', title: 'The Foundations of Patent Protection', url: '1-1-the-foundations-of-patent-protection'),
+        Lesson(id: 'ch1-s2', sectionRef: '1.2', title: 'The Weakness of Early Patent Systems', url: '1-2-the-weakness-of-early-patent-systems'),
+        Lesson(id: 'ch1-s3', sectionRef: '1.3', title: 'America’s Uniquely Democratic Patent System', url: '1-3-americas-uniquely-democratic-patent-system'),
+        Lesson(id: 'ch1-s4', sectionRef: '1.4', title: 'The Role of the U.S. Legal System', url: '1-4-the-role-of-the-u-s-legal-system'),
+        Lesson(id: 'ch1-s5', sectionRef: '1.5', title: 'What the U.S. Patent System Wrought', url: '1-5-what-the-u-s-patent-system-wrought'),
+        Lesson(id: 'ch1-s6', sectionRef: '1.6', title: 'Patent-Eligible Inventions', url: '1-6-patent-eligible-inventions'),
+        Lesson(id: 'ch1-s7', sectionRef: '1.7', title: 'Criteria for Patenting', url: '1-7-criteria-for-patenting'),
+        Lesson(id: 'ch1-s8', sectionRef: '1.8', title: 'Other Types of Patents', url: '1-8-other-types-of-patents'),
+        Lesson(id: 'ch1-s9', sectionRef: '1.9', title: 'The Patenting Process', url: '1-9-the-patenting-process'),
+      ],
+    ),
+    CourseChapter(
+      id: 'ch2',
+      number: '2',
+      title: 'Patent Enforcement',
+      lessons: [
+        Lesson(id: 'ch2-intro', sectionRef: '', title: 'Introduction', url: '2-introduction'),
+        Lesson(id: 'ch2-s1', sectionRef: '2.1', title: 'The Right to Enforce Patents', url: '2-1-the-right-to-enforce-patents'),
+        Lesson(id: 'ch2-s2', sectionRef: '2.2', title: 'Deciding Whether and How to Enforce a Patent', url: '2-2-deciding-whether-and-how-to-enforce-a-patent'),
+        Lesson(id: 'ch2-s3', sectionRef: '2.3', title: 'Patent Litigation', url: '2-3-patent-litigation'),
+        Lesson(id: 'ch2-s4', sectionRef: '2.4', title: 'Getting Started', url: '2-4-getting-started'),
+        Lesson(id: 'ch2-s5', sectionRef: '2.5', title: 'Pretrial Procedures', url: '2-5-pretrial-procedures'),
+        Lesson(id: 'ch2-s6', sectionRef: '2.6', title: 'Trial', url: '2-6-trial'),
+        Lesson(id: 'ch2-s7', sectionRef: '2.7', title: 'Post-Trial Procedures', url: '2-7-post-trial-procedures'),
+        Lesson(id: 'ch2-s8', sectionRef: '2.8', title: 'Appeals', url: '2-8-appeals'),
+        Lesson(id: 'ch2-s9', sectionRef: '2.9', title: 'Litigation Alternatives', url: '2-9-litigation-alternatives'),
+        Lesson(id: 'ch2-s10', sectionRef: '2.10', title: 'Patent Trolls and Efforts to Thwart Them', url: '2-10-patent-trolls-and-efforts-to-thwart-them'),
+      ],
+    ),
+    CourseChapter(
+      id: 'ch3',
+      number: '3',
+      title: 'Copyright Basics',
+      lessons: [
+        Lesson(id: 'ch3-intro', sectionRef: '', title: 'Introduction', url: '3-introduction'),
+        Lesson(id: 'ch3-s1', sectionRef: '3.1', title: 'The Basics of Copyright', url: '3-1-the-basics-of-copyright'),
+        Lesson(id: 'ch3-s2', sectionRef: '3.2', title: 'Early Copyright Systems', url: '3-2-early-copyright-systems'),
+        Lesson(id: 'ch3-s3', sectionRef: '3.3', title: 'Copyright in America', url: '3-3-copyright-in-america'),
+        Lesson(id: 'ch3-s4', sectionRef: '3.4', title: 'Eligible Works', url: '3-4-eligible-works'),
+        Lesson(id: 'ch3-s5', sectionRef: '3.5', title: 'Rights and Term', url: '3-5-rights-and-term'),
+        Lesson(id: 'ch3-s6', sectionRef: '3.6', title: 'Infringement and Remedies', url: '3-6-infringement-and-remedies'),
+        Lesson(id: 'ch3-s7', sectionRef: '3.7', title: 'The Fair Use Defense', url: '3-7-the-fair-use-defense'),
+        Lesson(id: 'ch3-s8', sectionRef: '3.8', title: 'Changes in Copyright Law', url: '3-8-changes-in-copyright-law'),
+        Lesson(id: 'ch3-s9', sectionRef: '3.9', title: 'New Technology Challenges to Copyright', url: '3-9-new-technology-challenges-to-copyright'),
+        Lesson(id: 'ch3-s10', sectionRef: '3.10', title: 'Alternative Forms of Copyright', url: '3-10-alternative-forms-of-copyright'),
+        Lesson(id: 'ch3-s11', sectionRef: '3.11', title: 'Copyright in a Changing World', url: '3-11-copyright-in-a-changing-world'),
+      ],
+    ),
+    CourseChapter(
+      id: 'ch4',
+      number: '4',
+      title: 'Trademark Basics',
+      lessons: [
+        Lesson(id: 'ch4-intro', sectionRef: '', title: 'Introduction', url: '4-introduction'),
+        Lesson(id: 'ch4-s1', sectionRef: '4.1', title: 'Core Concepts', url: '4-1-core-concepts'),
+        Lesson(id: 'ch4-s2', sectionRef: '4.2', title: 'Early Trademark Systems', url: '4-2-early-trademark-systems'),
+        Lesson(id: 'ch4-s3', sectionRef: '4.3', title: 'U.S. Trademark Law', url: '4-3-u-s-trademark-law'),
+        Lesson(id: 'ch4-s4', sectionRef: '4.4', title: 'The Four Types of Trademarks', url: '4-4-the-four-types-of-trademarks'),
+        Lesson(id: 'ch4-s5', sectionRef: '4.5', title: 'The Subject Matter of Trademarks', url: '4-5-the-subject-matter-of-trademarks'),
+        Lesson(id: 'ch4-s6', sectionRef: '4.6', title: 'The Spectrum of Distinctiveness', url: '4-6-the-spectrum-of-distinctiveness'),
+        Lesson(id: 'ch4-s7', sectionRef: '4.7', title: 'Bars to Trademark', url: '4-7-bars-to-trademark'),
+        Lesson(id: 'ch4-s8', sectionRef: '4.8', title: 'Establishing Trademark Protection', url: '4-8-establishing-trademark-protection'),
+        Lesson(id: 'ch4-s9', sectionRef: '4.9', title: 'Trademark Infringement', url: '4-9-trademark-infringement'),
+        Lesson(id: 'ch4-s10', sectionRef: '4.10', title: 'Trademark Remedies', url: '4-10-trademark-remedies'),
+        Lesson(id: 'ch4-s11', sectionRef: '4.11', title: 'Fair Use of Trademarks', url: '4-11-fair-use-of-trademarks'),
+      ],
+    ),
+    CourseChapter(
+      id: 'ch5',
+      number: '5',
+      title: 'Trade Secret Basics',
+      lessons: [
+        Lesson(id: 'ch5-intro', sectionRef: '', title: 'Introduction', url: '5-introduction'),
+        Lesson(id: 'ch5-s1', sectionRef: '5.1', title: 'Trade Secret Protection', url: '5-1-trade-secret-protection'),
+        Lesson(id: 'ch5-s2', sectionRef: '5.2', title: 'The Foundations of Trade Secrets Law', url: '5-2-the-foundations-of-trade-secrets-law'),
+        Lesson(id: 'ch5-s3', sectionRef: '5.3', title: 'Elements of a Trade Secret', url: '5-3-elements-of-a-trade-secret'),
+        Lesson(id: 'ch5-s4', sectionRef: '5.4', title: 'The Secrecy Requirement', url: '5-4-the-secrecy-requirement'),
+        Lesson(id: 'ch5-s5', sectionRef: '5.5', title: 'Misappropriation of Trade Secrets', url: '5-5-misappropriation-of-trade-secrets'),
+        Lesson(id: 'ch5-s6', sectionRef: '5.6', title: 'Remedies Available for the Misappropriation of Trade Secrets', url: '5-6-remedies-available-for-the-misappropriation-of-trade-secrets'),
+      ],
+    ),
+    CourseChapter(
+      id: 'app',
+      number: 'App.',
+      title: 'Appendices',
+      lessons: [
+        Lesson(id: 'app-a', sectionRef: 'A', title: 'Glossary', url: 'a-glossary'),
+      ],
+    ),
+  ],
+);

@@ -1,36 +1,89 @@
 import 'package:flutter/material.dart';
+import '../data/course_catalog.dart';
 import '../services/local_store.dart';
+import '../services/update_manager.dart';
 import '../theme/app_theme.dart';
+import '../widgets/update_dialog.dart';
 import 'about_screen.dart';
 import 'home_screen.dart';
 import 'saved_screen.dart';
 import 'search_screen.dart';
+import 'subject_screen.dart';
 
 /// Bottom navigation: Home, Search, Saved, About. No accounts and no sign-in.
 class AppShell extends StatefulWidget {
   final LocalStore store;
-  const AppShell({super.key, required this.store});
+
+  /// Keeps the app up to date; null in tests, which never reach the network.
+  final UpdateManager? updates;
+
+  const AppShell({super.key, required this.store, this.updates});
 
   @override
   State<AppShell> createState() => _AppShellState();
 }
 
-class _AppShellState extends State<AppShell> {
+class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
   static const int _tabHome = 0, _tabSearch = 1, _tabSaved = 2, _tabAbout = 3;
 
   int _index = _tabHome;
   final ValueNotifier<SearchRequest?> _requests = ValueNotifier<SearchRequest?>(null);
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.updates != null) {
+      WidgetsBinding.instance.addObserver(this);
+      WidgetsBinding.instance.addPostFrameCallback((_) => _onLaunch());
+    }
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _requests.dispose();
     super.dispose();
+  }
+
+  /// Leaving the app is when a downloaded update gets installed, so the
+  /// next launch runs the new version.
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) widget.updates?.onBackground();
+  }
+
+  Future<void> _onLaunch() async {
+    final updates = widget.updates!;
+    final notice = await updates.onLaunch();
+    if (!mounted) return;
+    switch (notice) {
+      case UpdateNotice.updated:
+        showUpdated(context);
+      case UpdateNotice.readyToInstall:
+        await showReadyToInstall(context, updates);
+      case UpdateNotice.needsPermission:
+        await showAllowAutoUpdates(context, updates);
+      case UpdateNotice.none:
+        break;
+    }
   }
 
   /// Switch to the Search tab and run [query] there.
   void _runSearch(String query) {
     setState(() => _index = _tabSearch);
     _requests.value = SearchRequest(query);
+  }
+
+  /// Subjects with built-in lessons open their own page (lessons and search
+  /// results); the rest go straight to search.
+  void _openSubject(String name, String subjectId, String query) {
+    if (coursesForSubject(subjectId).isEmpty) {
+      _runSearch(query);
+      return;
+    }
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (_) => SubjectScreen(store: widget.store, title: name, subjectId: subjectId, query: query),
+    ));
   }
 
   @override
@@ -44,10 +97,11 @@ class _AppShellState extends State<AppShell> {
             onOpenAbout: () => setState(() => _index = _tabAbout),
             onOpenSaved: () => setState(() => _index = _tabSaved),
             onOpenSearch: () => setState(() => _index = _tabSearch),
+            onOpenSubject: _openSubject,
           ),
           SearchScreen(store: widget.store, requests: _requests),
           SavedScreen(store: widget.store, onSearch: _runSearch),
-          const AboutScreen(),
+          AboutScreen(store: widget.store, updates: widget.updates),
         ],
       ),
       bottomNavigationBar: BottomTabBar(

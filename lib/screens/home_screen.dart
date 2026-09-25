@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import '../data/course_catalog.dart';
 import '../theme/app_theme.dart';
 
 /// Landing screen: a search bar, a hero carousel, subject shortcuts and
@@ -15,12 +16,16 @@ class HomeScreen extends StatefulWidget {
   final VoidCallback onOpenAbout;
   final VoidCallback onOpenSaved;
   final VoidCallback onOpenSearch;
+
+  /// Opens a subject: its built-in lessons (if any) and its search results.
+  final void Function(String name, String subjectId, String query) onOpenSubject;
   const HomeScreen({
     super.key,
     required this.onSearch,
     required this.onOpenAbout,
     required this.onOpenSaved,
     required this.onOpenSearch,
+    required this.onOpenSubject,
   });
 
   @override
@@ -32,6 +37,12 @@ class _Subject {
   final String query;
   final IconData icon;
   const _Subject(this.label, this.query, this.icon);
+
+  /// Name on one line, e.g. 'Computer Science'.
+  String get name => label.replaceAll('\n', ' ');
+
+  /// Matches [Course.subjectId], e.g. 'mathematics', 'computer-science'.
+  String get id => name.toLowerCase().replaceAll(RegExp(r'[^a-z]+'), '-');
 }
 
 class _Slide {
@@ -188,7 +199,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 subjects: const [..._subjects, ..._moreSubjects],
                 onTap: (s) {
                   Navigator.pop(ctx);
-                  widget.onSearch(s.query);
+                  widget.onOpenSubject(s.name, s.id, s.query);
                 },
               ),
             ],
@@ -242,7 +253,7 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: side,
               child: _SubjectGrid(
                 subjects: _subjects,
-                onTap: (s) => widget.onSearch(s.query),
+                onTap: (s) => widget.onOpenSubject(s.name, s.id, s.query),
                 trailing: _SubjectTile(
                   label: 'More\nSubjects',
                   icon: Icons.grid_view_rounded,
@@ -592,7 +603,13 @@ class _SubjectGrid extends StatelessWidget {
       crossAxisSpacing: 12,
       childAspectRatio: 0.82,
       children: [
-        for (final s in subjects) _SubjectTile(label: s.label, icon: s.icon, onTap: () => onTap(s)),
+        for (final s in subjects)
+          _SubjectTile(
+            label: s.label,
+            icon: s.icon,
+            hasLessons: coursesForSubject(s.id).isNotEmpty,
+            onTap: () => onTap(s),
+          ),
         if (trailing != null) trailing!,
       ],
     );
@@ -603,7 +620,10 @@ class _SubjectTile extends StatelessWidget {
   final String label;
   final IconData icon;
   final VoidCallback onTap;
-  const _SubjectTile({required this.label, required this.icon, required this.onTap});
+
+  /// Shows a small book badge when the subject has built-in lessons.
+  final bool hasLessons;
+  const _SubjectTile({required this.label, required this.icon, required this.onTap, this.hasLessons = false});
 
   @override
   Widget build(BuildContext context) {
@@ -613,23 +633,42 @@ class _SubjectTile extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(14),
         onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, size: 32, color: AppColors.primary),
-              const SizedBox(height: 10),
-              Text(
-                label,
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                    fontSize: 12, height: 1.25, fontWeight: FontWeight.w500, color: AppColors.textPrimary),
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(icon, size: 32, color: AppColors.primary),
+                    const SizedBox(height: 10),
+                    Text(
+                      label,
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                          fontSize: 12, height: 1.25, fontWeight: FontWeight.w500, color: AppColors.textPrimary),
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
+            ),
+            if (hasLessons)
+              const Positioned(
+                top: 6,
+                right: 6,
+                child: Tooltip(
+                  message: 'Has built-in lessons',
+                  child: CircleAvatar(
+                    radius: 9,
+                    backgroundColor: AppColors.gold,
+                    child: Icon(Icons.menu_book_rounded, size: 11, color: AppColors.primary),
+                  ),
+                ),
+              ),
+          ],
         ),
       ),
     );

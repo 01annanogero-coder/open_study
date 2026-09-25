@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 Future<void> pumpApp(WidgetTester tester) async {
   SharedPreferences.setMockInitialValues({});
   final store = await LocalStore.open();
-  await tester.pumpWidget(OpenStudyApp(store: store));
+  await tester.pumpWidget(OpenStudyApp(store: store, checkForUpdates: false));
 }
 
 void main() {

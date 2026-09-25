@@ -7,6 +7,14 @@ import '../models/study_resource.dart';
 class LocalStore extends ChangeNotifier {
   static const String _savedKey = 'saved_resources_v1';
   static const String _recentKey = 'recent_searches_v1';
+  static const String _checkUpdatesKey = 'check_updates_v1';
+  static const String _lastUpdateCheckKey = 'last_update_check_v1';
+  static const String _lastLessonPrefix = 'last_lesson_v1_';
+  static const String _wifiOnlyKey = 'update_wifi_only_v1';
+  static const String _lastRunVersionKey = 'last_run_version_v1';
+  static const String _downloadedVersionKey = 'downloaded_update_version_v1';
+  static const String _downloadedPathKey = 'downloaded_update_path_v1';
+  static const String _permissionAskedKey = 'install_permission_asked_v1';
   static const int _maxSaved = 200;
   static const int _maxRecent = 10;
 
@@ -131,4 +139,66 @@ class LocalStore extends ChangeNotifier {
     await _persistRecent();
     notifyListeners();
   }
+
+  /// Whether the app keeps itself up to date: asks GitHub for a newer
+  /// version when it opens, downloads it and installs it.
+  bool get checkForUpdates => _prefs.getBool(_checkUpdatesKey) ?? true;
+
+  Future<void> setCheckForUpdates(bool value) async {
+    await _prefs.setBool(_checkUpdatesKey, value);
+    notifyListeners();
+  }
+
+  DateTime? get lastUpdateCheck {
+    final ms = _prefs.getInt(_lastUpdateCheckKey);
+    return ms == null ? null : DateTime.fromMillisecondsSinceEpoch(ms);
+  }
+
+  Future<void> setLastUpdateCheck(DateTime time) =>
+      _prefs.setInt(_lastUpdateCheckKey, time.millisecondsSinceEpoch);
+
+  /// The lesson last opened in a built-in course, so reading can resume.
+  String? lastLesson(String courseId) => _prefs.getString('$_lastLessonPrefix$courseId');
+
+  Future<void> setLastLesson(String courseId, String lessonId) async {
+    await _prefs.setString('$_lastLessonPrefix$courseId', lessonId);
+    notifyListeners();
+  }
+
+  /// Download updates only on Wi-Fi (or another unmetered connection).
+  bool get updateOnWifiOnly => _prefs.getBool(_wifiOnlyKey) ?? true;
+
+  Future<void> setUpdateOnWifiOnly(bool value) async {
+    await _prefs.setBool(_wifiOnlyKey, value);
+    notifyListeners();
+  }
+
+  /// The app version that ran last time, to notice the first launch after
+  /// an update.
+  String? get lastRunVersion => _prefs.getString(_lastRunVersionKey);
+
+  Future<void> setLastRunVersion(String version) => _prefs.setString(_lastRunVersionKey, version);
+
+  /// A downloaded and checked update waiting to be installed.
+  ({String version, String path})? get downloadedUpdate {
+    final v = _prefs.getString(_downloadedVersionKey);
+    final p = _prefs.getString(_downloadedPathKey);
+    return v == null || p == null ? null : (version: v, path: p);
+  }
+
+  Future<void> setDownloadedUpdate(String version, String path) async {
+    await _prefs.setString(_downloadedVersionKey, version);
+    await _prefs.setString(_downloadedPathKey, path);
+  }
+
+  Future<void> clearDownloadedUpdate() async {
+    await _prefs.remove(_downloadedVersionKey);
+    await _prefs.remove(_downloadedPathKey);
+  }
+
+  /// The update version for which the student was already asked to allow
+  /// automatic installs, so the question is not repeated every launch.
+  String? get permissionAskedFor => _prefs.getString(_permissionAskedKey);
+
+  Future<void> setPermissionAskedFor(String version) => _prefs.setString(_permissionAskedKey, version);
 }

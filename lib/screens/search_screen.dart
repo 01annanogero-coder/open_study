@@ -21,7 +21,20 @@ class SearchScreen extends StatefulWidget {
   /// Other screens post a [SearchRequest] here to make this screen search.
   final ValueNotifier<SearchRequest?>? requests;
 
-  const SearchScreen({super.key, required this.store, this.requests});
+  /// Searched for as soon as the screen opens, e.g. a subject's name.
+  final String? initialQuery;
+
+  /// True when shown inside another screen (a subject's "Search results"
+  /// tab), which supplies the app bar.
+  final bool embedded;
+
+  const SearchScreen({
+    super.key,
+    required this.store,
+    this.requests,
+    this.initialQuery,
+    this.embedded = false,
+  });
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
@@ -43,6 +56,11 @@ class _SearchScreenState extends State<SearchScreen> {
   void initState() {
     super.initState();
     widget.requests?.addListener(_onRequest);
+    final initial = widget.initialQuery?.trim() ?? '';
+    if (initial.isNotEmpty) {
+      _controller.text = initial;
+      _runSearch();
+    }
   }
 
   void _onRequest() {
@@ -80,8 +98,7 @@ class _SearchScreenState extends State<SearchScreen> {
     }
   }
 
-  void _openResource(StudyResource resource) =>
-      openResource(context, resource, widget.store);
+  void _openResource(StudyResource resource) => openResource(context, resource, widget.store);
 
   @override
   void dispose() {
@@ -93,54 +110,56 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final content = SafeArea(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
+            child: TextField(
+              controller: _controller,
+              textInputAction: TextInputAction.search,
+              onSubmitted: (_) => _runSearch(),
+              decoration: InputDecoration(
+                hintText: 'Search e.g. "BA Kiswahili notes"',
+                prefixIcon: const Icon(Icons.search_rounded),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.arrow_forward_rounded),
+                  onPressed: () => _runSearch(),
+                ),
+              ),
+            ),
+          ),
+          if (_result != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: SubcategoryChips(
+                subcategories: _result!.subcategories,
+                selected: _selectedSubcategory,
+                onSelected: (sub) {
+                  _controller.text = _lastQuery;
+                  _runSearch(subcategory: sub);
+                },
+              ),
+            ),
+          if (_result != null && _result!.failedSources.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+              child: Text(
+                'Did not respond: ${_result!.failedSources.join(', ')}',
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ),
+          Expanded(child: _buildBody()),
+        ],
+      ),
+    );
+    if (widget.embedded) return content;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Search'),
         titleTextStyle: Theme.of(context).textTheme.headlineSmall,
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
-              child: TextField(
-                controller: _controller,
-                textInputAction: TextInputAction.search,
-                onSubmitted: (_) => _runSearch(),
-                decoration: InputDecoration(
-                  hintText: 'Search e.g. "BA Kiswahili notes"',
-                  prefixIcon: const Icon(Icons.search_rounded),
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.arrow_forward_rounded),
-                    onPressed: () => _runSearch(),
-                  ),
-                ),
-              ),
-            ),
-            if (_result != null)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: SubcategoryChips(
-                  subcategories: _result!.subcategories,
-                  selected: _selectedSubcategory,
-                  onSelected: (sub) {
-                    _controller.text = _lastQuery;
-                    _runSearch(subcategory: sub);
-                  },
-                ),
-              ),
-            if (_result != null && _result!.failedSources.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-                child: Text(
-                  'Did not respond: ${_result!.failedSources.join(', ')}',
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ),
-            Expanded(child: _buildBody()),
-          ],
-        ),
-      ),
+      body: content,
     );
   }
 

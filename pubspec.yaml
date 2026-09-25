@@ -1,7 +1,7 @@
 name: open_study_app
 description: Search and study using free, openly-licensed educational materials — all viewable in-app.
 publish_to: 'none'
-version: 1.0.1+2
+version: 1.0.2+3
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -31,6 +31,8 @@ dependencies:
   cached_network_image: ^3.3.1
   google_fonts: ^6.2.1
   shimmer: ^3.0.0
+  flutter_math_fork: ^0.7.4
+  crypto: ^3.0.7
 
 dev_dependencies:
   flutter_test:
